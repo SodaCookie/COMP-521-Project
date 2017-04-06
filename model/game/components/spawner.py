@@ -6,5 +6,8 @@ class Spawner(Component):
     def __init__(self, entities):
         self.entities = entities
 
+    def get_actions(self, entities):
+        pass
+
     def update(self, source, amount):
         pass # TODO

@@ -39,3 +39,10 @@ class Tile(object):
             if isinstance(mod, mod_type):
                 return True
         return False
+
+    def get_modifier(self, mod_type):
+        """Returns a boolean of if Tile contains a TileModifier instance"""
+        for mod in self.mods:
+            if isinstance(mod, mod_type):
+                return mod
+        return None
