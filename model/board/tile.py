@@ -31,7 +31,7 @@ class Tile(object):
     def remove_modifiers(self, mod_type):
         """Removes all instances of mod_type in Tile"""
         self.mods = set(filter(lambda mod : not isinstance(mod, mod_type),
-                               sequence))
+                               self.mods))
 
     def has_modifier(self, mod_type):
         """Returns a boolean of if Tile contains a TileModifier instance"""

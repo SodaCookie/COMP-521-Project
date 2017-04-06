@@ -9,3 +9,6 @@ def add_resource(board, x, y, category, amount):
 
 def set_pathable(board, x, y, pathable):
     board[x, y].pathable = pathable
+
+def set_elevation(board, x, y, new_height):
+    board[x, y].elevation = new_height
