@@ -3,10 +3,13 @@
 
 class Unit(object):
 
-    def __init__(self, pos=(0, 0), components=None):
+    def __init__(self, name, timecost, cost, pos=(0, 0), components=None):
         self.x = pos[0]
         self.y = pos[1]
         self.player = None
+        self.timecost = timecost
+        self.cost = cost
+        self.name = name
         self.components = set() if components == None else set(components)
 
     def set_player(self, player):
