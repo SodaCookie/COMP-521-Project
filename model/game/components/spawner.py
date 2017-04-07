@@ -3,9 +3,9 @@ from model.game.component import Component
 
 class Spawner(Component):
 
-    def __init__(self, units):
-        self.units = units
-        self._cooldown = 0
+    def __init__(self, unit_blueprints):
+        self.unit_blueprints = unit_blueprints
+        self.cooldown = 0
 
     def _get_available_space(self, game):
         positions = set()
@@ -28,16 +28,29 @@ class Spawner(Component):
     @staticmethod
     def create_spawn_action(unit, pos, spawn):
         def callback(game):
-            unit.get_component(Spawner)._cooldown = spawn.cost
+            # Put on cooldown
+            unit.get_component(Spawner).cooldown = spawn.timecost
+            # Initate at position
+            new_unit = spawn.instantiate(pos)
+            # Set player owner
+            new_unit.set_player(unit.player)
+            # Remove minerals
+            unit.player.minerals -= spawn.cost
         return callback
 
-    def get_actions(self, entities):
+    def get_actions(self, game):
         space = _get_available_space(game)
-        if self._cooldown == 0 and space:
-            return
+        if self.cooldown == 0 and space and len(self.unit.player.units)
+                < self.unit.player.max_supply:
+            actions = []
+            for blueprint in self.unit_blueprints:
+                if blueprint.cost <= self.unit.player.minerals:
+                    actions.append(self.create_spawn_action(
+                        self.unit, space, blueprint))
+            return actions
         else:
             return None
 
     def update(self, source, amount):
-        if self._cooldown > 0:
-            self._coo -= 1
+        if self.cooldown > 0:
+            self.cooldown -= 1

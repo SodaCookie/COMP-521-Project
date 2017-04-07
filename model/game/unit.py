@@ -10,11 +10,27 @@ class Unit(object):
         self.timecost = timecost
         self.cost = cost
         self.name = name
-        self.components = set() if components == None else set(components)
+        self.actionable = True
+        self.is_building = False
+        self.components = set()
+        if components != None:
+            for component in components:
+                self.add_component(component)
 
     def set_player(self, player):
         """Sets the player who owns this unit"""
         self.player = player
+
+    def get_actions(self, game):
+        """Returns all the actions of that unit"""
+        if not self.actionable:
+            return None
+        actions = []
+        for component in self.components:
+            comp_actions = component.get_actions(game)
+            if comp_actions:
+                actions.extend(comp_actions)
+        return actions
 
     def kill(self):
         """Kills the unit."""
