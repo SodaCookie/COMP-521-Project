@@ -1,5 +1,5 @@
 """Defines the Board class"""
-from model.tile import Tile
+from model.board.tile import Tile
 
 class Board(object):
     """Board class provides board state and helper functions."""

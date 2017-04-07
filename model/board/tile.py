@@ -1,6 +1,4 @@
 """Defines the Tile class"""
-from model.board.modifiers.pathable import Pathable
-
 
 class Tile(object):
     """ Simple container class holding unique information on the board

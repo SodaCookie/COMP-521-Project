@@ -1,8 +1,6 @@
 """Defines operation functions that can be put on the board"""
 
-from model.board.modifiers.pathable import Pathable
 from model.board.modifiers.resource import Resource
-
 
 def add_resource(board, x, y, category, amount):
     board[x, y].add_modifier(Resource(category, amount))
