@@ -17,7 +17,7 @@ class Player(object):
         self.faction = faction
 
     def get_actions(self, game):
-        if not self.actionable:
+        if not self.actionable or len(self.units) >= self.max_supply:
             return actions
         actions = []
         for i in range(game.board.width):

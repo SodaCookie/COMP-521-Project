@@ -10,3 +10,9 @@ def set_pathable(board, x, y, pathable):
 
 def set_elevation(board, x, y, new_height):
     board[x, y].elevation = new_height
+
+def add_spawn(board, x, y, position):
+    pass
+
+def remove_spawn(board, x, y, position):
+    pass
