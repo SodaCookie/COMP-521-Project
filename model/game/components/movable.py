@@ -10,7 +10,7 @@ class Movable(Component):
         return _find_moves(game)
 
     def get_actions(self, game):
-        """Return a list of moveable moves."""
+        """Return a list of Movable moves."""
         return [create_move_action(self.unit, x, y) for x, y in _find_moves(
             self.unit.x, self.unit.y, [], game, 0)]
 
@@ -42,9 +42,10 @@ class Movable(Component):
         actual_moves = [(x, y)]
         for pos in self.neighbours:
             # Check for height difference, check for occupy by another unit
-            if cur.elevation - game.board[pos] <= 1 and
-                    not game.position_occupied(pos) and
-                    not in visited:
+            if cur.elevation - game.board[pos] <= 1 and \
+                    not game.position_occupied(pos) and \
+                    game.board[pos].pathable and \
+                    pos not in visited:
                 visited.add(pos)
                 actual_moves.extend(_find_moves(pos[0], pos[1], visited, game,
                                                 depth + 1))

@@ -10,6 +10,9 @@ class Player(object):
         self.max_supply = 50
         self.actionable = True
 
+    def initialize(self, game, position):
+        self.faction.initialize(game, position)
+
     def set_faction(self, faction):
         self.faction = faction
 
@@ -33,8 +36,6 @@ class Player(object):
             new_building.set_player(self)
             self.minerals -= blueprint.cost
         return callback
-
-    def
 
     def add_unit(self, unit):
         unit.set_player(self)

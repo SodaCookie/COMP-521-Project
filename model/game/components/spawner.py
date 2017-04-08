@@ -40,7 +40,7 @@ class Spawner(Component):
 
     def get_actions(self, game):
         space = _get_available_space(game)
-        if self.cooldown == 0 and space and len(self.unit.player.units)
+        if self.cooldown == 0 and space and len(self.unit.player.units) \
                 < self.unit.player.max_supply:
             actions = []
             for blueprint in self.unit_blueprints:

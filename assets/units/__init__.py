@@ -16,7 +16,7 @@ imported_names = []
 for module in _imports:
     members = inspect.getmembers(module)
     for name, value in members:
-        if isinstance(value, Blueprint):
+        if inspect.isclass(value) and issubclass(value, Blueprint):
             locals()[name] = value
             imported_names.append(name)
 

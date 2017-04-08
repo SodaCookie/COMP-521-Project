@@ -8,6 +8,7 @@ class Board(object):
         """Initializes a blank board of 0 elevation."""
         self.width = width
         self.height = height
+        self.start_locations = set()
         self._board = [[Tile(i, j) for j in range(height)]
             for i in range(width)]
 

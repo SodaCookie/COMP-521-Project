@@ -42,7 +42,7 @@ class Attack(Component):
                 for ax, ay in self._get_attack_ring(x, y, self.attack_range):
                     unit = game.position_occupied((ax, ay))
                     # If we find a unit and it is owned by a different player
-                    if unit and unit.player != self.unit.player and
+                    if unit and unit.player != self.unit.player and \
                             unit.has_component(Health):
                         attackable.append(((x, y), unit))
         else:
@@ -52,7 +52,7 @@ class Attack(Component):
             for ax, ay in self._get_attack_ring(x, y, self.attack_range):
                 unit = game.position_occupied((ax, ay))
                 # If we find a unit and it is owned by a different player
-                if unit and unit.player != self.unit.player and
-                        unit.has_component(Health)::
+                if unit and unit.player != self.unit.player and \
+                        unit.has_component(Health):
                     attackable.append(((x, y), unit))
         return attackable
