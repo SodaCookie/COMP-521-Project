@@ -6,14 +6,19 @@ import random
 
 class Game(object):
 
-    def __init__(self, width, height):
-        self.board = Board(width, height)
+    def __init__(self, width=10, height=10, board=None):
+        if board:
+            self.board = board
+        else:
+            self.board = Board(width, height)
         self.player1 = Player()
         self.player2 = Player()
         self.running = True
         self.player1_controller = None
         self.player2_controller = None
         self.current_player = None
+        self.winner = None
+        self.deadlock_count = 0
 
     def set_player1_controller(self, controller):
         self.player1_controller = controller
@@ -68,7 +73,7 @@ class Game(object):
                     break
             else:
                 self.running = False
-                print("Player2 won!")
+                self.winner = 2
                 break
             # Player 2 win condition
             for unit in self.player2.units:
@@ -76,7 +81,11 @@ class Game(object):
                     break
             else:
                 self.running = False
-                print("Player1 won!")
+                self.winner = 1
+                break
+
+            if self.deadlock_count > 6: # passed turns for 3 rounds
+                # Draw condition
                 break
 
     def begin_phase(self):
@@ -89,15 +98,18 @@ class Game(object):
         if unit == None:
             # Player action
             if action == "end":
+                self.deadlock_count += 1
                 self.end_phase()
                 self.begin_phase()
             else:
                 action(self)
                 self.current_player.actionable = False
+                self.deadlock_count = 0
         else:
             if unit.actionable:
                 action(self)
                 unit.actionable = False
+                self.deadlock_count = 0
 
     def end_phase(self):
         # Toggle the current player
