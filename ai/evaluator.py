@@ -13,7 +13,7 @@ class Evaluator(object):
 		self.resources = set()
 		self.spawners = set()
 
-	def eval_board(player, game):
+	def eval_board(self, player, game):
 		""" Evaluate the board from a player's perspective and return the score """
 		enemy = game.player2 if (player == game.player1) else game.player1
 
@@ -42,7 +42,7 @@ class Evaluator(object):
 
 
 	# Prefer more expensive units. Avoid building too many workers
-	def eval_units(player, influence_map, threat_map):
+	def eval_units(self, player, influence_map, threat_map):
 		need_workers = need_build_workers(influence_map, threat_map)
 		for unit in player.units:
 			if unit.has_component(Health):
@@ -52,13 +52,13 @@ class Evaluator(object):
 					self.score += unit.cost
 
 	# Attacking will prioritize units that are easier to kill
-	def eval_enemy_units(enemy):
+	def eval_enemy_units(self, enemy):
 		for unit in enemy.units:
 			if unit.has_component(Health):
 				self.score += 100 * unit.get_component(Health).current_hp_percent()
 
 	# Attack units out of attack range will prefer positions that bring them closer to the enemy
-	def eval_soldiers(enemy, game):
+	def eval_soldiers(self, enemy, game):
 		enemy_distances = set()
 		for soldier in self.soldiers:
 			if not solder.get_component(Attack)._get_attacks(game):
@@ -68,7 +68,7 @@ class Evaluator(object):
 
 	# Prefer to place spawners close to other buidings
 	# As a measure to avoid wall-offs, tiles around spawner must not be occupied by buildings
-	def eval_spawner_pos(player, enemy, game):
+	def eval_spawner_pos(self, player, enemy, game):
 		temp_score = 0
 		for spawner in self.spawners:
 			# check if tiles surrounding the spawner have buildings
@@ -92,7 +92,7 @@ class Evaluator(object):
 			self.score -= sum_dist_squared
 
 
-	def eval_workers(threat_map, game, resource_category):
+	def eval_workers(self, threat_map, game, resource_category):
 		for worker in self.workers:
 			threat_level = threat_map[worker.x][worker.y]
 			if threat_level:
@@ -119,7 +119,7 @@ class Evaluator(object):
 								goal = tile
 					self.score -= dist_squared(worker.x, worker.y, goal.x, goal.y)
 
-	def need_build_workers(influence_map, threat_map):
+	def need_build_workers(self, influence_map, threat_map):
 		""" helper function to determine if we need more workers """
 		if len(self.workers) == 0:
 			return True
