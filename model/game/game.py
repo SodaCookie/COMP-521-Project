@@ -56,16 +56,16 @@ class Game(object):
     def run(self):
         self.current_player = self.player1
         unit, action = None, None
-        while self.running:
+        count = 0
+        while self.running and count < 50:
+            print("Playing turn: %s" % count)
             # Run inputs for ai/player
             if self.current_player == self.player1 and self.player1_controller:
-                unit, action = self.player1_controller.run(self.player1, self)
+                self.player1_controller.run(self.player1, self)
             if self.current_player == self.player2 and self.player2_controller:
-                unit, action = self.player2_controller.run(self.player2, self)
-            if action:
-                self.execute(unit, action)
-                unit, action = None, None
-
+                self.player2_controller.run(self.player2, self)
+            self.end_phase()
+            self.begin_phase()
             # Check for win condition
             # Player 1 win condition
             for unit in self.player1.units:
@@ -87,29 +87,12 @@ class Game(object):
             if self.deadlock_count > 6: # passed turns for 3 rounds
                 # Draw condition
                 break
+            count += 1
 
     def begin_phase(self):
         for unit in self.current_player.units:
             unit.actionable = True
         self.current_player.actionable = True
-
-    def execute(self, unit, action):
-        """Executes an action by the """
-        if unit == None:
-            # Player action
-            if action == "end":
-                self.deadlock_count += 1
-                self.end_phase()
-                self.begin_phase()
-            else:
-                action(self)
-                self.current_player.actionable = False
-                self.deadlock_count = 0
-        else:
-            if unit.actionable:
-                action(self)
-                unit.actionable = False
-                self.deadlock_count = 0
 
     def end_phase(self):
         # Toggle the current player

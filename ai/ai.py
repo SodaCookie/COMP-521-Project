@@ -8,7 +8,7 @@ from model.game.components.spawner import Spawner
 from model.game.game import Game
 
 class Ai(object):
-	
+
 	def __init__(self):
 		self.evaluator = Evaluator()
 		self.init_score = 0
@@ -29,56 +29,60 @@ class Ai(object):
 			if unit.has_component(Spawner):
 				spawners.add(unit)
 
-		run_group(soldiers, game)
-		run_group(workers, game)
-		run_build_actions(player, game)
-		run_group(spawners, game)
+		self.run_group(soldiers, game)
+		self.run_group(workers, game)
+		self.run_build_actions(player, game)
+		self.run_group(spawners, game)
 
-	def run_group(group, game):
+	def run_group(self, group, game):
 		""" Run optimal action for each unit in given set """
 		for unit in group:
-			action_list = unit.get_actions()
+			action_list = unit.get_actions(game)
 			action_scores = []
 			for i in range(0, len(action_list)):
-				action_scores.append(eval_action(unit.x, unit.y, i, game))
-			max_score = max(action_scores)
-			if max_score >= self.init_score:
-				self.init_score = max_score
-				optimal_action_index = action_scores.index[max_score]
-				optimal_action = action_list[optimal_action_index]
-				optimal_action(game)
-			else:
-				continue
+				action_scores.append(self.eval_action(unit.x, unit.y, i, game))
+			if action_scores:
+				max_score = max(action_scores)
+				if max_score >= self.init_score:
+					self.init_score = max_score
+					optimal_action_index = action_scores.index(max_score)
+					optimal_action = action_list[optimal_action_index]
+					optimal_action(game)
+				else:
+					continue
 
-	def run_build_actions(player, game):
+	def run_build_actions(self, player, game):
 		""" Create optimal building """
 		build_actions = player.get_actions(game)
 		build_scores = []
 		for i in range(0, len(build_actions)):
-			build_scores.append(eval_build(i, game))
-		max_score = max(build_scores)
-		if max_score >= self.init_score:
-			self.init_score = max_score
-			optimal_build_index = build_scores.index[max_score]
-			optimal_build = build_actions[optimal_build_index]
-			optimal_build(game)
+			build_scores.append(self.eval_build(i, game))
+		if build_scores:
+			max_score = max(build_scores)
+			if max_score >= self.init_score:
+				self.init_score = max_score
+				optimal_build_index = build_scores.index(max_score)
+				optimal_build = build_actions[optimal_build_index]
+				optimal_build(game)
 
-	def eval_action(x, y, act_index, game):
+	def eval_action(self, x, y, act_index, game):
 		""" Evaluates board state of a potential action """
-		sim = Game(deepcopy(game))
-		player = sim.current_player
+		player = game.current_player
 		for unit in player.units:    # find the unit in game copy
 			if unit.x == x and unit.y == y:
 				active_unit = unit
 				break
-		actions = active_unit.get_actions()
-		actions[index](sim)
-		return self.evaluator.eval_board(player, sim)
+		actions = active_unit.get_actions(game)
+		reverse_action = actions[act_index](game)
+		result = self.evaluator.eval_board(player, game)
+		reverse_action(game)
+		return result
 
-	def eval_build(index, game):
-		""" Evaluate board state of a potential building creation """
-		sim = Game(deepcopy(game))
-		player = sim.current_player
-		build = player.get_actions()[index]
-		build(sim)
-		return self.evaluator.eval_board(player, sim)
+	def eval_build(self, index, game):
+		"""Evaluate board state of a potential building creation"""
+		player = game.current_player
+		build = player.get_actions(game)[index]
+		reverse_build = build(game)
+		result = self.evaluator.eval_board(player, game)
+		reverse_build(game)
+		return result

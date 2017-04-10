@@ -12,5 +12,5 @@ class Health(Component):
         if self.amount <= 0:
             self.unit.kill()
 
-    def current_hp_percent():
+    def current_hp_percent(self):
     	return self.amount / self.total

@@ -7,6 +7,6 @@ class KeepBlueprint(Blueprint):
     """Used to create a copy of a Keep (Loyalist main building)"""
 
     def __init__(self):
-        super().__init__("keep", 10, 500)
+        super().__init__("keep", 10, 500, True)
         self.add_component(Health, 80)
-        self.add_component(Spawner, [WorkerBlueprint])
+        self.add_component(Spawner, [WorkerBlueprint()])

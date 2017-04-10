@@ -7,6 +7,6 @@ class HideoutBlueprint(Blueprint):
     """Used to create a copy of a tavern (Rebels main building)"""
 
     def __init__(self):
-        super().__init__("hideout", 10, 500)
+        super().__init__("hideout", 10, 500, True)
         self.add_component(Health, 80)
-        self.add_component(Spawner, [ThiefBlueprint])
+        self.add_component(Spawner, [ThiefBlueprint()])

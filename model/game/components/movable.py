@@ -7,15 +7,25 @@ class Movable(Component):
         self.movement = movement
 
     def get_moves(self, game):
-        return _find_moves(game)
+        return self._find_moves(self.unit.x, self.unit.y, set(), game, 0)
 
     def get_actions(self, game):
         """Return a list of Movable moves."""
-        return [create_move_action(self.unit, x, y) for x, y in _find_moves(
-            self.unit.x, self.unit.y, [], game, 0)]
+        return [self.create_move_action(self.unit, x, y) for x, y in self._find_moves(
+            self.unit.x, self.unit.y, set(), game, 0)]
 
     @staticmethod
     def create_move_action(unit, x, y):
+        """Creates a move function that moves this component's unit to x, y"""
+        def callback(game):
+            prev_x, prev_y = unit.x, unit.y
+            unit.x = x
+            unit.y = y
+            return Movable.create_reverse_move_action(unit, prev_x, prev_y)
+        return callback
+
+    @staticmethod
+    def create_reverse_move_action(unit, x, y):
         """Creates a move function that moves this component's unit to x, y"""
         def callback(game):
             unit.x = x
@@ -40,13 +50,13 @@ class Movable(Component):
 
         cur = game.board[x, y]
         actual_moves = [(x, y)]
-        for pos in self.neighbours:
+        for pos in neighbours:
             # Check for height difference, check for occupy by another unit
-            if cur.elevation - game.board[pos] <= 1 and \
+            if cur.elevation - game.board[pos].elevation <= 1 and \
                     not game.position_occupied(pos) and \
                     game.board[pos].pathable and \
                     pos not in visited:
                 visited.add(pos)
-                actual_moves.extend(_find_moves(pos[0], pos[1], visited, game,
-                                                depth + 1))
+                actual_moves.extend(self._find_moves(pos[0], pos[1], visited,
+                                                     game, depth + 1))
         return actual_moves

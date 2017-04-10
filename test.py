@@ -3,6 +3,7 @@ from model.utility.board_operations import *
 from model.board.board import Board
 from assets.factions.loyalists_faction import LoyalistFaction
 from assets.factions.rebels_faction import RebelsFaction
+from ai.ai import Ai
 
 import random
 
@@ -20,6 +21,9 @@ from model.game.game import Game
 g = Game(10, 10)
 g.player1.set_faction(LoyalistFaction())
 g.player2.set_faction(RebelsFaction())
+g.set_player1_controller(Ai())
+g.set_player2_controller(Ai())
 g.initialize()
 g.run()
-visualize_board_height(g.board, True)
+print(g.winner)
+# visualize_board_height(g.board, True)

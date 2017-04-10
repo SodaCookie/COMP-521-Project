@@ -20,6 +20,7 @@ class Unit(object):
     def set_player(self, player):
         """Sets the player who owns this unit"""
         self.player = player
+        self.player.units.add(self)
 
     def get_actions(self, game):
         """Returns all the actions of that unit"""

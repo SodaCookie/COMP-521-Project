@@ -11,19 +11,19 @@ class Spawner(Component):
         positions = set()
         x, y = self.unit.x, self.unit.y
         i, j = 0, 1
-        positions.add(x + i, y + j)
-        positions.add(x + j, y - i)
-        positions.add(x - i, y - j)
-        positions.add(x - j, y + i)
+        positions.add((x + i, y + j))
+        positions.add((x + j, y - i))
+        positions.add((x - i, y - j))
+        positions.add((x - j, y + i))
 
         available = set()
         for px, py in positions:
             # Check if in bounds
             if 0 <= px < game.board.width and 0 <= py < game.board.height:
-                unit = game.position_occupied(ax, ay)
+                unit = game.position_occupied((px, py))
                 if not unit:
                     return (px, py)
-        return Nones
+        return None
 
     @staticmethod
     def create_spawn_action(unit, pos, spawn):
@@ -36,10 +36,22 @@ class Spawner(Component):
             new_unit.set_player(unit.player)
             # Remove minerals
             unit.player.minerals -= spawn.cost
+            return Spawner.create_reverse_spawn_action(unit, new_unit)
+        return callback
+
+    @staticmethod
+    def create_reverse_spawn_action(parent, unit):
+        def callback(game):
+            # Put off cooldown
+            parent.get_component(Spawner).cooldown = 0
+            # Initate at position
+            unit.kill()
+            # Remove minerals
+            parent.player.minerals += unit.cost
         return callback
 
     def get_actions(self, game):
-        space = _get_available_space(game)
+        space = self._get_available_space(game)
         if self.cooldown == 0 and space and len(self.unit.player.units) \
                 < self.unit.player.max_supply:
             actions = []

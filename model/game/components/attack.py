@@ -16,18 +16,28 @@ class Attack(Component):
     @staticmethod
     def create_attack_action(unit, pos, target):
         def callback(game):
-            Movable.create_move_action(unit, pos[0], pos[1])(game)
+            reverse_move = Movable.create_move_action(unit.unit, pos[0], pos[1])(game)
             target.get_component(Health).damage(unit.damage)
+            return Attack.create_reverse_attack_action(unit, target, reverse_move)
+        return callback
+
+    @staticmethod
+    def create_reverse_attack_action(unit, target, reverse_move):
+        def callback(game):
+            if target.get_component(Health).amount <= 0:
+                target.set_player(target.player)
+            target.get_component(Health).amount += unit.damage
+            reverse_move(game)
         return callback
 
     def _get_attack_ring(self, x, y, attack_range):
         attack_positions = set()
         for i in range(attack_range):
             j = attack_range - i
-            attack_positions.add(x + i, y + j)
-            attack_positions.add(x + j, y - i)
-            attack_positions.add(x - i, y - j)
-            attack_positions.add(x - j, y + i)
+            attack_positions.add((x + i, y + j))
+            attack_positions.add((x + j, y - i))
+            attack_positions.add((x - i, y - j))
+            attack_positions.add((x - j, y + i))
         return attack_positions
 
     def _get_attacks(self, game):

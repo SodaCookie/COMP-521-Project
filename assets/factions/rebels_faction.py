@@ -7,8 +7,8 @@ class RebelsFaction(Faction):
 	"""Define the Rebels faction"""
 
 	def __init__(self):
-	    super().__init__([HideoutBlueprint, TavernBlueprint])
+	    super().__init__([HideoutBlueprint(), TavernBlueprint()])
 
-	def instantiate(self, game, player, position):
+	def initialize(self, game, player, position):
 		start_building = self.building_blueprints[0].instantiate(position)
 		start_building.set_player(player)

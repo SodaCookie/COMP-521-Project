@@ -8,6 +8,6 @@ class BarracksBlueprint(Blueprint):
     """Used to create a copy of a Barracks (Loyalist production building)"""
 
     def __init__(self):
-        super().__init__("barracks", 10, 300)
+        super().__init__("barracks", 10, 300, True)
         self.add_component(Health, 50)
-        self.add_component(Spawner, [KnightBlueprint, LongbowmanBlueprint])
+        self.add_component(Spawner, [KnightBlueprint(), LongbowmanBlueprint()])
