@@ -2,6 +2,7 @@ from ai.influence import *
 from model.board.modifiers.resource import *
 from model.game.components.health import Health
 from model.game.components.collecter import Collecter
+from model.game.components.spawner import Spawner
 from model.utility.distance import *
 
 class Evaluator(object):
