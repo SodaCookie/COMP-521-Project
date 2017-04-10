@@ -9,8 +9,10 @@ class Player(object):
         self.faction = None
         self.max_supply = 50
         self.actionable = True
+        self.init_pos = ()
 
     def initialize(self, game, position):
+        self.init_pos = position
         self.faction.initialize(game, position)
 
     def set_faction(self, faction):
