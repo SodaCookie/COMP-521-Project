@@ -1,4 +1,6 @@
 """Defines the Tile class"""
+import inspect
+
 
 class Tile(object):
     """ Simple container class holding unique information on the board
@@ -16,15 +18,18 @@ class Tile(object):
         """Adds a given modifer to the Tile"""
         self.mods.append(modifier)
 
-    def remove_modifier(self, mod_type):
-        """Removes the first instance of mod_type in Tile"""
-        to_remove = None
-        for mod in self.mods:
-            if isinstance(mod, mod_type):
-                to_remove = mod
-                break
-        if to_remove:
-            self.mods.remove(to_remove)
+    def remove_modifier(self, mod_or_modtype):
+        """Removes the first instance of mod_type in Tile or mod"""
+        if inspect.isclass(mod_or_modtype):
+            to_remove = None
+            for mod in self.mods:
+                if isinstance(mod, mod_or_modtype):
+                    to_remove = mod
+                    break
+            if to_remove:
+                self.mods.remove(to_remove)
+        else:
+            self.mods.remove(mod)
 
     def remove_modifiers(self, mod_type):
         """Removes all instances of mod_type in Tile"""

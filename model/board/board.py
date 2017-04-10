@@ -14,3 +14,6 @@ class Board(object):
 
     def __getitem__(self, key):
         return self._board[key[0]][key[1]]
+
+    def __setitem__(self, key, value):
+        self._board[key[0]][key[1]] = value
