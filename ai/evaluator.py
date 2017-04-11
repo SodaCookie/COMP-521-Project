@@ -143,5 +143,6 @@ class Evaluator(object):
 				if influence_map[tile.x][tile.y] - threat_map[tile.x][tile.y] > 0:
 					num_controlled_tiles += 1
 			except IndexError:
-				print("Index error in influence/threat maps")
+				pass
+				# print("Index error in influence/threat maps")
 		return len(self.workers) < num_controlled_tiles * range + 1

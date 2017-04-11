@@ -29,6 +29,7 @@ def default_fitness_function(games):
 def create_fitness_stopmethod(fitness):
     """Returns a function that stops when fitness level is reached"""
     def callback(experiment):
+        print("FITNESS: %0.3f" % experiment.current_max_fitness)
         return experiment.current_max_fitness > fitness
     return callback
 
@@ -58,6 +59,7 @@ class Experiment(object):
         self.current_population = []
         self.current_max_fitness = 0
         self.current_generation = 0
+        self.average_fitnesses = []
 
     def run(self):
         seed = random.randint(0, 4294967295)
@@ -155,9 +157,14 @@ class Experiment(object):
         evaluated population."""
         self.current_max_fitness = 0
         fitnesses = []
+        avg_fitness = 0
         for board, games in gen_result:
             fitness = self.options["fitness"](games)
             if fitness > self.current_max_fitness:
                 self.current_max_fitness = fitness
             fitnesses.append((board, fitness))
+            avg_fitness += fitness
+        avg_fitness = avg_fitness / len(gen_result)
+        print("Average fitness: %0.3f" % avg_fitness)
+        self.average_fitnesses.append(avg_fitness)
         return fitnesses

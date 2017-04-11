@@ -80,3 +80,7 @@ class Unit(object):
             if isinstance(component, cls):
                 return True
         return False
+
+    def update(self, game):
+        for component in self.components:
+            component.update(game)

@@ -63,6 +63,6 @@ class Spawner(Component):
         else:
             return None
 
-    def update(self, source, amount):
+    def update(self, game):
         if self.cooldown > 0:
             self.cooldown -= 1

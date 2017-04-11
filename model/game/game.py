@@ -72,8 +72,9 @@ class Game(object):
                 if self.current_player == self.player2 and self.player2_controller:
                     self.player2_controller.run(self.player2, self)
             except:
-                print("ERROR - ALERT! ALERT! ALERT!")
-                traceback.print_exc()
+                pass
+                # print("ERROR - ALERT! ALERT! ALERT!")
+                # traceback.print_exc()
             self.end_phase()
             self.begin_phase()
             # Check for win condition
@@ -105,6 +106,7 @@ class Game(object):
         for unit in self.current_player.units:
             unit.actionable = True
         self.current_player.actionable = True
+        self.current_player.start_turn(self)
 
     def end_phase(self):
         # Toggle the current player

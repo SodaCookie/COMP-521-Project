@@ -22,7 +22,7 @@ class Collecter(Component):
     def update(self, game):
         """Get all in range resource tiles and add to player enemies."""
         harvested = 0
-        for pos in _get_resource_range(self.unit.x, self.unit.y, self.collection_range):
+        for pos in self._get_resource_range(self.unit.x, self.unit.y, self.collection_range):
             tile = game.board[pos]
             if tile:
                 resource = tile.get_modifier(Resource)
@@ -34,4 +34,4 @@ class Collecter(Component):
                     if resource.amount == 0:
                         # If expired remove the resource
                         game.board[pos].remove_modifier(Resource)
-        self.unit.player.minerals += resource_amount
+        self.unit.player.minerals += harvested

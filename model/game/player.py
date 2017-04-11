@@ -18,6 +18,10 @@ class Player(object):
     def set_faction(self, faction):
         self.faction = faction
 
+    def start_turn(self, game):
+        for unit in self.units:
+            unit.update(game)
+
     def get_actions(self, game):
         if not self.actionable or len(self.units) >= self.max_supply:
             return actions
