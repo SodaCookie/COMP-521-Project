@@ -1,4 +1,6 @@
 """Defines operations used to visualize states of the board."""
+from model.board.modifiers.resource import Resource
+
 import matplotlib.pyplot as plot
 from matplotlib.mlab import griddata
 from mpl_toolkits.mplot3d import Axes3D
@@ -29,4 +31,19 @@ def visualize_board_pathing(board):
 
     fig = plot.figure()
     plot.imshow(pathing, cmap='Greys',  interpolation='nearest')
+    plot.show()
+
+def visualize_board_resources(board):
+    resources = zeros((board.width, board.height))
+    max_val = 1
+    for i in range(board.width):
+        for j in range(board.height):
+            if board[i, j].has_modifier(Resource):
+                resources[i, j] = int(board[i, j].get_modifier(Resource).amount)
+                if resources[i, j] > max_val:
+                    max_val = resources[i, j]
+
+    fig = plot.figure()
+    resources = resources / max_val
+    plot.imshow(resources, cmap='Greys',  interpolation='nearest')
     plot.show()

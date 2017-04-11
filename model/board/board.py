@@ -18,4 +18,7 @@ class Board(object):
         return None
 
     def __setitem__(self, key, value):
-        self._board[key[0]][key[1]] = value
+        if 0 <= key[0] < self.width and 0 <= key[1] < self.height:
+            self._board[key[0]][key[1]] = value
+        else:
+            print("Incorrect set value at %s" % str(key))

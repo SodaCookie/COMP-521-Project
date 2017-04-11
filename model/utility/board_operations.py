@@ -10,7 +10,7 @@ def copy_board(dest, src, rect=None, pos=None):
     If rect is given than a rect, starting from the x,, y corner from the src
     will be copied to dest at it's topleft corner. If pos is also specified
     than the copied rect will start at dest at the given position."""
-    if not rect:
+    if rect:
         x, y, width, height = rect
         if not pos:
             pos = (0, 0) # default top left

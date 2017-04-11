@@ -8,6 +8,6 @@ class LongbowmanBlueprint(Blueprint):
 
     def __init__(self):
         super().__init__("longbowman", 7, 80)
-        self.add_component(Health, 8)
-        self.add_component(Attack, 4, 2)
+        self.add_component(Health, 5)
+        self.add_component(Attack, 3, 4)
         self.add_component(Movable, 3)

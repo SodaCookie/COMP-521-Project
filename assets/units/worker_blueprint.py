@@ -12,4 +12,4 @@ class WorkerBlueprint(Blueprint):
         super().__init__("worker", 2, 20)
         self.add_component(Health, 5)
         self.add_component(Movable, 2)
-        self.add_component(Collecter, 2, 25, ResourceCategory.MINERAL)
+        self.add_component(Collecter, 2, 50, ResourceCategory.MINERAL)

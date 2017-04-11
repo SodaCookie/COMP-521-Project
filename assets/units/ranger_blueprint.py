@@ -7,7 +7,7 @@ class RangerBlueprint(Blueprint):
     """Used to create a copy of a ranger (Rebels combat unit)"""
 
     def __init__(self):
-        super().__init__("ranger", 7, 80)
-        self.add_component(Health, 8)
-        self.add_component(Attack, 4, 2)
+        super().__init__("ranger", 7, 60)
+        self.add_component(Health, 7)
+        self.add_component(Attack, 2, 3)
         self.add_component(Movable, 3)

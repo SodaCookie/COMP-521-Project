@@ -16,7 +16,7 @@ class Tile(object):
 
     def add_modifier(self, modifier):
         """Adds a given modifer to the Tile"""
-        self.mods.append(modifier)
+        self.mods.add(modifier)
 
     def remove_modifier(self, mod_or_modtype):
         """Removes the first instance of mod_type in Tile or mod"""
@@ -29,7 +29,7 @@ class Tile(object):
             if to_remove:
                 self.mods.remove(to_remove)
         else:
-            self.mods.remove(mod)
+            self.mods.remove(mod_or_modtype)
 
     def remove_modifiers(self, mod_type):
         """Removes all instances of mod_type in Tile"""

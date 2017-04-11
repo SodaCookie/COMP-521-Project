@@ -9,5 +9,5 @@ class TavernBlueprint(Blueprint):
 
     def __init__(self):
         super().__init__("tavern", 10, 300, True)
-        self.add_component(Health, 50)
+        self.add_component(Health, 30)
         self.add_component(Spawner, [BrigandBlueprint(), RangerBlueprint()])

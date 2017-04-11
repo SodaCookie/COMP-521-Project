@@ -8,6 +8,6 @@ class KnightBlueprint(Blueprint):
 
     def __init__(self):
         super().__init__("knight", 5, 50)
-        self.add_component(Health, 10)
-        self.add_component(Attack, 1, 3)
-        self.add_component(Movable, 5)
+        self.add_component(Health, 20)
+        self.add_component(Attack, 1, 4)
+        self.add_component(Movable, 2)

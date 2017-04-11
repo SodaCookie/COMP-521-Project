@@ -4,6 +4,7 @@ from model.game.components.health import Health
 from model.game.components.collecter import Collecter
 from model.game.components.spawner import Spawner
 from model.utility.distance import *
+from model.board.modifiers.resource import ResourceCategory
 
 from itertools import chain
 
@@ -31,7 +32,7 @@ class Evaluator(object):
 		for i in range(game.board.width):
 			for j in range(game.board.height):
 				if game.board[i, j].has_modifier(Resource):
-					self.resources.add(tile)
+					self.resources.add(game.board[i, j])
 
 		influence_map = get_influence_map(player, game.board)
 		threat_map = get_influence_map(enemy, game.board)
@@ -77,8 +78,8 @@ class Evaluator(object):
 		# temp_score = 0
 		# for spawner in self.spawners:
 		# 	# check if tiles surrounding the spawner have buildings
-		# 	for i in range(-1, 1):
-		# 		for j in range(-1, 1):
+		# 	for i in range(-1, 2):
+		# 		for j in range(-1, 2):
 		# 			if i == 0 and j == 0:
 		# 				continue
 		# 			adj_x = spawner.x + i
@@ -91,10 +92,10 @@ class Evaluator(object):
 		# if (temp_score):
 		# 	self.score -= temp_score
 		# else:
-		# 	sum_dist_squared = 0
-		# 	for spawner in self.spawners:
-		# 		sum_dist_squared += dist_squared(spawner.x, spawner.y, player.init_pos[0], player.init_pos[1])
-		# 	self.score -= sum_dist_squared
+		# sum_dist_squared = 0
+		# for spawner in self.spawners:
+		# 	sum_dist_squared += dist_squared(spawner.x, spawner.y, player.init_pos[0], player.init_pos[1])
+		# self.score -= sum_dist_squared
 
 
 	def eval_workers(self, threat_map, game, resource_category):
@@ -111,7 +112,7 @@ class Evaluator(object):
 					tile = game.board[pos]
 					if tile:
 						resource = game.board[pos].get_modifier(Resource)
-						if resource and resource.category == category:
+						if resource and resource.category == ResourceCategory.MINERAL:
 							temp_score += 1
 
 				if temp_score != 0:    # nothing to collect
@@ -124,7 +125,8 @@ class Evaluator(object):
 								goal = tile
 							elif (tile.get_modifier(Resource).amount > goal.get_modifier(Resource).amount):
 								goal = tile
-					self.score -= dist_squared(worker.x, worker.y, goal.x, goal.y)
+					if goal:
+						self.score -= dist_squared(worker.x, worker.y, goal.x, goal.y)
 
 	def need_build_workers(self, influence_map, threat_map):
 		""" helper function to determine if we need more workers """
@@ -137,6 +139,9 @@ class Evaluator(object):
 
 		num_controlled_tiles = 0
 		for tile in self.resources:
-			if influence_map[tile.x][tile.y] - threat_map[tile.x][tile.y] > 0:
-				num_controlled_tiles += 1
+			try:
+				if influence_map[tile.x][tile.y] - threat_map[tile.x][tile.y] > 0:
+					num_controlled_tiles += 1
+			except IndexError:
+				print("Index error in influence/threat maps")
 		return len(self.workers) < num_controlled_tiles * range + 1

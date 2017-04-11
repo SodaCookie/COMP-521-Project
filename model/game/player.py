@@ -5,7 +5,7 @@ class Player(object):
 
     def __init__(self):
         self.units = set()
-        self.minerals = 10000
+        self.minerals = 500
         self.faction = None
         self.max_supply = 50
         self.actionable = True
